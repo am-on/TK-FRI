@@ -35,4 +35,44 @@ public class Sklad<Tip> {
     public boolean isEmpty() {
         return (null == vrh);
     }
+
+    public int count() {
+        int result = 0;
+        Element<Tip> temp = vrh;
+        while (null != temp)  {
+            ++result;
+            temp = temp.vezava;
+        }
+        return result;
+    }
+
+    public boolean top(Tip e) {
+        if (null == vrh) {
+            throw new java.util.NoSuchElementException();
+        }
+        return vrh.vrednost.equals(e);
+    }
+
+    public int search(Tip e) {
+        Element<Tip> temp = vrh;
+        int result = -1;
+
+        while (null != temp)  {
+
+            ++result;
+
+            if(e.equals(temp.vrednost)) {
+                break;
+            }
+
+            temp = temp.vezava;
+
+        }
+
+        if(temp == null) {
+            result = -1;
+        }
+
+        return result;
+    }
 }
