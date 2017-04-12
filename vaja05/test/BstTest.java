@@ -1,5 +1,10 @@
 import static org.junit.Assert.*;
-import org.junit.*;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 public class BstTest {
 
@@ -55,6 +60,12 @@ public class BstTest {
     public void testAddMany() {
         addFive();
         assertEquals(5, bst.size());
+    }
+
+    @Test(expected = java.lang.IllegalArgumentException.class)
+    public void testAddSameElements() {
+        addFive();
+        addFive();
     }
 
     @Test
@@ -259,5 +270,5 @@ public class BstTest {
         assertTrue(bst.exists("Test1"));
         assertEquals("Test3", bst.getFirst());
     }
-    
+
 }

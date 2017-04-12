@@ -65,15 +65,15 @@ public class Bst<Tip extends Comparable> implements Seznam<Tip> {
     private ElementBST delete(Tip e, ElementBST node) {
 
         if (node.value.compareTo(e) == 0) {
-            if (node.left == null && node.right == null) {
-                return null;
-            } else if (node.left == null) {
+
+            if (node.left == null) {
+                if (node.right == null) {
+                    return null;
+                }
                 return node.right;
             } else if (node.right == null) {
                 return node.left;
-            }
-            else {
-
+            } else {
                 ElementBST minNode = node.right;
                 if (minNode.left == null) {
                     minNode.left = node.left;
@@ -102,15 +102,15 @@ public class Bst<Tip extends Comparable> implements Seznam<Tip> {
         return node;
 
     }
-
-    private ElementBST deleteMin(ElementBST node) {
-        ElementBST minNode = node;
-        while (minNode.left != null) {
-            minNode = minNode.left;
-        }
-
-        return delete(minNode.value, minNode);
-    }
+// Namesto brisanja min elementa, prevežem kazalce...
+//    private ElementBST deleteMin(ElementBST node) {
+//        ElementBST minNode = node;
+//        while (minNode.left != null) {
+//            minNode = minNode.left;
+//        }
+//
+//        return delete(minNode.value, minNode);
+//    }
 
     private int getDepth(ElementBST node) {
         if (node == null) {

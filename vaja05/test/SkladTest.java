@@ -203,6 +203,16 @@ public class SkladTest {
         assertFalse(instance.exists(str));
     }
 
+    @Test
+    public void testRemoveMany() {
+        instance.push("Test1");
+        instance.push("Test2");
+        instance.push("Test3");
+        instance.push("Test4");
+        assertEquals("Test2", instance.remove("Test2"));
+        assertFalse(instance.exists("Test2"));
+    }
+
     @Test(expected =  java.util.NoSuchElementException.class)
     public void testRemoveEmpty() {
         instance.remove("Test1");

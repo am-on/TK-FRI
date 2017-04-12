@@ -48,6 +48,7 @@ public class PrioritetnaVrstaTest {
         pv.add("Test1");
         pv.add("Test2");
         pv.add("Test3");
+        pv.add("Test4");
     }
     
     // testi brisanja
@@ -189,16 +190,32 @@ public class PrioritetnaVrstaTest {
     }
 
     @Test
-    public void testRemove() {
+    public void testRemoveTwo() {
         pv.add("1");
         pv.add("2");
-        pv.add("3");
         assertEquals("1", pv.remove("1"));
         assertFalse(pv.exists("1"));
         assertEquals("2", pv.remove("2"));
         assertFalse(pv.exists("2"));
-        assertEquals("3", pv.remove("3"));
-        assertFalse(pv.exists("3"));
+    }
+
+    @Test
+    public void testRemoveMultiple() {
+        pv.add("Test1");
+        pv.add("Test5");
+        pv.add("Test2");
+        pv.add("Test4");
+        pv.add("Test3");
+        assertEquals("Test3", pv.remove("Test3"));
+        assertFalse(pv.exists("Test3"));
+        assertEquals("Test4", pv.remove("Test4"));
+        assertFalse(pv.exists("Test4"));
+        assertEquals("Test5", pv.remove("Test5"));
+        assertFalse(pv.exists("Test5"));
+        assertEquals("Test2", pv.remove("Test2"));
+        assertFalse(pv.exists("Test2"));
+        assertEquals("Test1", pv.remove("Test1"));
+        assertFalse(pv.exists("Test1"));
     }
 
     @Test(expected =  java.util.NoSuchElementException.class)

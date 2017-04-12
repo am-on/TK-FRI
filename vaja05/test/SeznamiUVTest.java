@@ -14,13 +14,21 @@ public class SeznamiUVTest {
         uv = new SeznamiUV();
     }
 
-    // TO DO 
-    // razsirite integracijske teste za metodo Use
+    @Test
+    public void testNoCommand() {
+        assertEquals("Error: enter command", uv.processInput(""));
+    }
+
     @Test
     public void testUse() {
         assertEquals("OK", uv.processInput("use pv"));
         assertEquals("OK", uv.processInput("use sk"));
         assertEquals("OK", uv.processInput("use bst"));
+    }
+
+    @Test
+    public void testNoUse() {
+        assertEquals("Error: please specify a data structure (use {pv|sk|bst})", uv.processInput("comm"));
     }
 
     @Test
@@ -32,6 +40,8 @@ public class SeznamiUVTest {
     public void testUseUnexisting() {
         assertEquals("Error: please specify a correct data structure type {pv|sk|bst}", uv.processInput("use test"));
     }
+
+
     // TO DO
     // napišite teste za sklad, prioritetno vrsto in BS drevo
     // testi kličejo (zaporedoma) vse operacije nad določeno strukturo 
@@ -62,6 +72,13 @@ public class SeznamiUVTest {
         assertEquals("OK", uv.processInput("use bst"));
         tests();
         testBst(true);
+        testBstDuplicateEntry();
+    }
+
+
+    private void testBstDuplicateEntry() {
+        assertEquals("OK", uv.processInput("add Test1"));
+        assertEquals("Error: Duplicated entry", uv.processInput("add Test1"));
     }
 
     // *****************
@@ -77,6 +94,9 @@ public class SeznamiUVTest {
         testIsEmptyEmpty();
         testResetOnEmpty();
         testSizeOnEmpty();
+
+        reset();
+        testInvalidCommand();
 
         reset();
         testSizeOne();
@@ -109,6 +129,9 @@ public class SeznamiUVTest {
         testExistsTwo();
 
         reset();
+        testExistsNoString();
+
+        reset();
         testExistsOnEmpty();
 
         reset();
@@ -119,6 +142,9 @@ public class SeznamiUVTest {
 
         reset();
         testRemove();
+
+        reset();
+        testRemoveNoString();
 
         reset();
         testRemoveTwo();
@@ -132,8 +158,13 @@ public class SeznamiUVTest {
         reset();
         testRemoveTwoNonExistent();
 
-
         reset();
+    }
+
+
+    public void testInvalidCommand() {
+        testAdd();
+        assertEquals("Error: invalid command", uv.processInput("qwe"));
     }
 
     public void reset() {
@@ -232,6 +263,11 @@ public class SeznamiUVTest {
         assertEquals("0", uv.processInput("size"));
     }
 
+    public void testRemoveNoString() {
+        testAdd();
+        assertEquals("Error: please specify a string", uv.processInput("remove"));
+    }
+
     public void testRemoveTwo() {
         testAdd();
         assertEquals("Test2", uv.processInput("remove Test2"));
@@ -268,6 +304,11 @@ public class SeznamiUVTest {
         testAdd();
         assertEquals("Element exists in data structure.", uv.processInput("exists Test1"));
         assertEquals("Element exists in data structure.", uv.processInput("exists Test2"));
+    }
+
+    public void testExistsNoString() {
+        testAdd();
+        assertEquals("Error: please specify a string", uv.processInput("exists"));
     }
 
 
