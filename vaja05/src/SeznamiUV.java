@@ -28,75 +28,59 @@ public class SeznamiUV {
             return "Error: please specify a data structure (use {pv|sk|bst})";
         }
         try {
-            switch (token) {
-                case "use":
-                    if (sc.hasNext()) {
-                          seznam = seznami.get(sc.next());
-                        if (null == seznam) {
-                            result = "Error: please specify a correct data structure type {pv|sk|bst}";
-                        }
-                    } else {
-                        result = "Error: please specify a data structure type {pv|sk|bst}";
+            if (token.equals("use")) {
+                if (sc.hasNext()) {
+                    seznam = seznami.get(sc.next());
+                    if (null == seznam) {
+                        result = "Error: please specify a correct data structure type {pv|sk|bst}";
                     }
-                    break;
-                case "add":
-                    if (sc.hasNext()) {
-                        seznam.add(sc.next());
-                    } else {
-                        result = "Error: please specify a string";
-                    }
-                    break;
-                case "remove_first":
-                    result = seznam.removeFirst();
-                    break;
-                case "get_first":
-                    result = seznam.getFirst();
-                    break;
-                case "size":
-                    result = seznam.size() + "";
-                    break;
-                case "depth":
-                    result = seznam.depth() + "";
-                    break;
-                case "is_empty":
-                    result = "Data structure is " + (seznam.isEmpty() ? "" : "not ") + "empty.";
-                    break;
-                case "reset":
-                    while (!seznam.isEmpty()) {
-                        seznam.removeFirst();
-                    }
-                    break;
-                case "exists":
-                    if (sc.hasNext()) {
-                        result = "Element " + (seznam.exists(sc.next()) ? "exists " : "doesn't exist ") + "in data structure.";
-                    } else {
-                        result = "Error: please specify a string";
-                    }
-                    break;
-                case "remove":
-                    if (sc.hasNext()) {
-                        String next = sc.next();
-                        if (!seznam.exists(next))
-                            result = "Error: can't remove element that doesn't exist in data structure.";
-                        else
-                            result = seznam.remove(next);
-                    } else {
-                        result = "Error: please specify a string";
-                    }
-                    break;
-
-                default:
-                    result = "Error: invalid command";
+                } else {
+                    result = "Error: please specify a data structure type {pv|sk|bst}";
+                }
+            } else if (token.equals("add")) {
+                if (sc.hasNext()) {
+                    seznam.add(sc.next());
+                } else {
+                    result = "Error: please specify a string";
+                }
+            } else if (token.equals("remove_first")) {
+                result = seznam.removeFirst();
+            } else if (token.equals("get_first")) {
+                result = seznam.getFirst();
+            } else if (token.equals("size")) {
+                result = seznam.size() + "";
+            } else if (token.equals("depth")) {
+                result = seznam.depth() + "";
+            } else if (token.equals("is_empty")) {
+                result = "Data structure is " + (seznam.isEmpty() ? "" : "not ") + "empty.";
+            } else if (token.equals("reset")) {
+                while (!seznam.isEmpty()) {
+                    seznam.removeFirst();
+                }
+            } else if (token.equals("exists")) {
+                if (sc.hasNext()) {
+                    result = "Element " + (seznam.exists(sc.next()) ? "exists " : "doesn't exist ") + "in data structure.";
+                } else {
+                    result = "Error: please specify a string";
+                }
+            } else if (token.equals("remove")) {
+                if (sc.hasNext()) {
+                    String next = sc.next();
+                    if (!seznam.exists(next))
+                        result = "Error: can't remove element that doesn't exist in data structure.";
+                    else
+                        result = seznam.remove(next);
+                } else {
+                    result = "Error: please specify a string";
+                }
+            } else {
+                result = "Error: invalid command";
             }
-        } catch (UnsupportedOperationException e) {
-            result = "Error: Operation not supported";
-        } catch (IllegalArgumentException e) {
+        }  catch (IllegalArgumentException e) {
             result = "Error: Duplicated entry";
         } catch (java.util.NoSuchElementException e) {
             result = "Error: data structure is empty";
         }
-
         return result;
     }
-
 }
