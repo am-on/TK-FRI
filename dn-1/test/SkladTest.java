@@ -8,6 +8,18 @@ public class SkladTest {
     public SkladTest() {
     }
 
+    private void addOne() {
+        instance.push("Test1");
+    }
+
+    private void addFive() {
+        instance.push("Test4");
+        instance.push("Test1");
+        instance.push("Test3");
+        instance.push("Test5");
+        instance.push("Test2");
+    }
+
     @BeforeClass
     public static void setUpOnce() {
         instance = new Sklad<>();
@@ -269,6 +281,37 @@ public class SkladTest {
         assertEquals("Test3", instance.pop());
         assertEquals("Test2", instance.pop());
         assertEquals("Test1", instance.pop());
+    }
+
+    @Test
+    public void testAsListEmpty() {
+        addOne();
+        assertEquals("[ ]", instance.asList());
+    }
+
+    @Test
+    public void testAsListOne() {
+        addOne();
+        assertEquals("[\"Test1\", ]", instance.asList());
+    }
+
+    @Test
+    public void testAsListMany() {
+        addFive();
+        assertEquals("[\"Test2\", \"Test4\", \"Test5\", \"Test1\", \"Test3\"]", instance.asList());
+    }
+
+    @Test
+    public void testAsListSame() {
+        addFive();
+        instance.asList();
+
+        assertEquals(5, instance.size());
+        assertEquals("Test2", instance.pop());
+        assertEquals("Test5", instance.pop());
+        assertEquals("Test3", instance.pop());
+        assertEquals("Test1", instance.pop());
+        assertEquals("Test4", instance.pop());
     }
 
 }

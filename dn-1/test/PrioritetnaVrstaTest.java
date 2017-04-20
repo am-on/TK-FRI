@@ -8,6 +8,18 @@ public class PrioritetnaVrstaTest {
     
     public PrioritetnaVrstaTest() {}
 
+    private void addOne() {
+        pv.add("Test1");
+    }
+
+    private void addFive() {
+        pv.add("Test3");
+        pv.add("Test1");
+        pv.add("Test5");
+        pv.add("Test4");
+        pv.add("Test2");
+    }
+
     @BeforeClass
     public static void setUpClass() throws Exception {
     }
@@ -277,6 +289,36 @@ public class PrioritetnaVrstaTest {
         assertEquals("Test3", pv.removeFirst());
         assertEquals("Test2", pv.removeFirst());
         assertEquals("Test1", pv.removeFirst());
+    }
+
+    @Test
+    public void testAsListEmpty() {
+        assertEquals("[ ]", pv.asList());
+    }
+
+    @Test
+    public void testAsListOne() {
+        addOne();
+        assertEquals("[\"Test1\", ]", pv.asList());
+    }
+
+    @Test
+    public void testAsListMany() {
+        addFive();
+        assertEquals("[\"Test1\", \"Test2\", \"Test5\", \"Test3\", \"Test4\"]", pv.asList());
+    }
+
+    @Test
+    public void testAsListSame() {
+        addFive();
+        pv.asList();
+
+        assertEquals(5, pv.size());
+        assertEquals("Test1", pv.removeFirst());
+        assertEquals("Test2", pv.removeFirst());
+        assertEquals("Test3", pv.removeFirst());
+        assertEquals("Test4", pv.removeFirst());
+        assertEquals("Test5", pv.removeFirst());
     }
 
 }

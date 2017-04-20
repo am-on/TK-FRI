@@ -271,4 +271,35 @@ public class BstTest {
         assertEquals("Test3", bst.getFirst());
     }
 
+    @Test
+    public void testAsListEmpty() {
+        assertEquals("[ ]", bst.asList());
+    }
+
+    @Test
+    public void testAsListOne() {
+        addOne();
+        assertEquals("[\"Test1\", ]", bst.asList());
+    }
+
+    @Test
+    public void testAsListMany() {
+        addFive();
+        assertEquals("[\"Test1\", \"Test2\", \"Test3\", \"Test4\", \"Test5\"]", bst.asList());
+    }
+
+    @Test
+    public void testAsListSame() {
+        addFive();
+        bst.asList();
+
+        assertEquals(5, bst.size());
+        assertEquals("Test2", bst.remove("Test2"));
+        assertEquals("Test5", bst.remove("Test5"));
+        assertEquals("Test3", bst.remove("Test3"));
+        assertEquals("Test1", bst.remove("Test1"));
+        assertEquals("Test4", bst.remove("Test4"));
+    }
+
+
 }
