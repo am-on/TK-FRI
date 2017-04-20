@@ -74,6 +74,7 @@ public class PrioritetnaVrstaTest {
     public void testRemoveFirstOne() {
         pv.add("Test");
         assertEquals("Test", pv.removeFirst());
+        assertFalse(pv.exists("Test"));
     }
     
     @Test
@@ -84,10 +85,15 @@ public class PrioritetnaVrstaTest {
         pv.add("Test4");
         pv.add("Test3");
         assertEquals("Test5", pv.removeFirst());
+        assertFalse(pv.exists("Test5"));
         assertEquals("Test4", pv.removeFirst());
+        assertFalse(pv.exists("Test4"));
         assertEquals("Test3", pv.removeFirst());
+        assertFalse(pv.exists("Test3"));
         assertEquals("Test2", pv.removeFirst());
+        assertFalse(pv.exists("Test2"));
         assertEquals("Test1", pv.removeFirst());
+        assertFalse(pv.exists("Test1"));
     }
     
     // metoda get
@@ -306,6 +312,15 @@ public class PrioritetnaVrstaTest {
     public void testAsListMany() {
         addFive();
         assertEquals("[\"Test5\", \"Test4\", \"Test3\", \"Test1\", \"Test2\"]", pv.asList());
+    }
+
+    @Test
+    public void testAsListManyRemove() {
+        addFive();
+        pv.remove("Test3");
+        pv.remove("Test2");
+        pv.remove("Test5");
+        assertEquals("[\"Test4\", \"Test1\"]", pv.asList());
     }
 
     @Test

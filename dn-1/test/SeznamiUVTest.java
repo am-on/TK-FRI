@@ -101,6 +101,7 @@ public class SeznamiUVTest {
         reset();
         testInvalidCommand();
 
+
         reset();
         testSizeOne();
 

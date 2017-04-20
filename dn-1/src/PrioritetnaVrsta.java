@@ -179,7 +179,7 @@ public class PrioritetnaVrsta<Tip extends Comparable> implements Seznam<Tip> {
 
     private String asListElements() {
         String list = "";
-        for (int i = 0; i < heap.length; i++) {
+        for (int i = 0; i < end; i++) {
             if (heap[i] != null)
                 list += "\"" + heap[i] + "\", ";
         }

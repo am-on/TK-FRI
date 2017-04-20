@@ -73,6 +73,8 @@ public class SeznamiUV {
                 } else {
                     result = "Error: please specify a string";
                 }
+            } else if (token.equals("asList")) {
+                result = seznam.asList();
             } else {
                 result = "Error: invalid command";
             }
