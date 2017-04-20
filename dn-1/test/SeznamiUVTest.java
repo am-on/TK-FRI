@@ -58,6 +58,7 @@ public class SeznamiUVTest {
         assertEquals("OK", uv.processInput("use sk"));
         tests();
         testSklad(true);
+        testAsListMany();
     }
 
     @Test
@@ -65,6 +66,7 @@ public class SeznamiUVTest {
         assertEquals("OK", uv.processInput("use pv"));
         tests();
         testPrioritetnaVrsta(true);
+        testAsListManyPV();
     }
 
     @Test
@@ -73,6 +75,7 @@ public class SeznamiUVTest {
         tests();
         testBst(true);
         testBstDuplicateEntry();
+        testAsListMany();
     }
 
 
@@ -159,8 +162,13 @@ public class SeznamiUVTest {
         testRemoveTwoNonExistent();
 
         reset();
-    }
+        testAsListEmpty();
 
+        reset();
+        testAsListOne();
+
+        reset();
+    }
 
     public void testInvalidCommand() {
         testAdd();
@@ -321,6 +329,32 @@ public class SeznamiUVTest {
     public void testExistsNonExistent() {
         testAdd();
         assertEquals("Element doesn't exist in data structure.", uv.processInput("exists Test3"));
+    }
+
+
+    public void testAsListEmpty() {
+        assertEquals("[ ]", uv.processInput("asList"));
+    }
+
+    public void testAsListOne() {
+        uv.processInput("add Test");
+        assertEquals("[\"Test\", ]", uv.processInput("asList"));
+    }
+
+    public void testAsListMany() {
+        uv.processInput("add Test3");
+        uv.processInput("add Test2");
+        uv.processInput("add Test1");
+
+        assertEquals("[\"Test1\", \"Test2\", \"Test3\"]", uv.processInput("asList"));
+    }
+
+    public void testAsListManyPV() {
+        uv.processInput("add Test3");
+        uv.processInput("add Test2");
+        uv.processInput("add Test1");
+
+        assertEquals("[\"Test3\", \"Test2\", \"Test1\"]", uv.processInput("asList"));
     }
 
 
