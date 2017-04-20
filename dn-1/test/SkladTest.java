@@ -285,7 +285,6 @@ public class SkladTest {
 
     @Test
     public void testAsListEmpty() {
-        addOne();
         assertEquals("[ ]", instance.asList());
     }
 
@@ -298,7 +297,7 @@ public class SkladTest {
     @Test
     public void testAsListMany() {
         addFive();
-        assertEquals("[\"Test2\", \"Test4\", \"Test5\", \"Test1\", \"Test3\"]", instance.asList());
+        assertEquals("[\"Test2\", \"Test5\", \"Test3\", \"Test1\", \"Test4\"]", instance.asList());
     }
 
     @Test

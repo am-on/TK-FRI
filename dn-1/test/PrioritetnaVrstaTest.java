@@ -305,7 +305,7 @@ public class PrioritetnaVrstaTest {
     @Test
     public void testAsListMany() {
         addFive();
-        assertEquals("[\"Test1\", \"Test2\", \"Test5\", \"Test3\", \"Test4\"]", pv.asList());
+        assertEquals("[\"Test5\", \"Test4\", \"Test3\", \"Test1\", \"Test2\"]", pv.asList());
     }
 
     @Test
@@ -314,11 +314,11 @@ public class PrioritetnaVrstaTest {
         pv.asList();
 
         assertEquals(5, pv.size());
-        assertEquals("Test1", pv.removeFirst());
-        assertEquals("Test2", pv.removeFirst());
-        assertEquals("Test3", pv.removeFirst());
-        assertEquals("Test4", pv.removeFirst());
         assertEquals("Test5", pv.removeFirst());
+        assertEquals("Test4", pv.removeFirst());
+        assertEquals("Test3", pv.removeFirst());
+        assertEquals("Test2", pv.removeFirst());
+        assertEquals("Test1", pv.removeFirst());
     }
 
 }
