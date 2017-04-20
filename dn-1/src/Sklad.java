@@ -138,5 +138,25 @@ public class Sklad<Tip> implements Seznam<Tip> {
         }
         return false;
     }
-    
+
+    @Override
+    public String asList() {
+        if (isEmpty()) {
+            return "[ ]";
+        }
+        if (size() == 1) {
+            return "[" + asListElements(vrh) + "]";
+        }
+        String list = asListElements(vrh);
+        list = list.substring(0, list.length()-2);
+        return "[" + list + "]";
+    }
+
+    private String asListElements(Element n) {
+        if (n == null) {
+            return "";
+        }
+        return "\"" + n.vrednost + "\", " + asListElements(n.vezava) ;
+    }
+
 }

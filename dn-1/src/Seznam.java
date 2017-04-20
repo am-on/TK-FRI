@@ -25,4 +25,7 @@ public interface Seznam<Tip> {
     // Ali element obstaja v strukturi
     boolean exists(Tip e);
 
+    // izpis elementov kot seznam
+    String asList();
+
 }

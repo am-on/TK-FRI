@@ -180,4 +180,24 @@ public class Bst<Tip extends Comparable> implements Seznam<Tip> {
     public boolean exists(Tip e) {
         return member(e);
     }
+
+    @Override
+    public String asList() {
+        if (isEmpty()) {
+            return "[ ]";
+        }
+        if (size() == 1) {
+            return "[" + asListElements(rootNode) + "]";
+        }
+        String list = asListElements(rootNode);
+        list = list.substring(0, list.length()-2);
+        return "[" + list + "]";
+    }
+
+    private String asListElements(ElementBST n) {
+        if (n == null) {
+            return "";
+        }
+        return asListElements(n.left) + "\"" + n.value + "\", " + asListElements(n.right) ;
+    }
 }

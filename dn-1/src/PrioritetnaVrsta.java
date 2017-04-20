@@ -163,5 +163,27 @@ public class PrioritetnaVrsta<Tip extends Comparable> implements Seznam<Tip> {
         }
         return false;
     }
- 
+
+    @Override
+    public String asList() {
+        if (isEmpty()) {
+            return "[ ]";
+        }
+        if (size() == 1) {
+            return "[" + asListElements() + "]";
+        }
+        String list = asListElements();
+        list = list.substring(0, list.length()-2);
+        return "[" + list + "]";
+    }
+
+    private String asListElements() {
+        String list = "";
+        for (int i = 0; i < heap.length; i++) {
+            if (heap[i] != null)
+                list += "\"" + heap[i] + "\", ";
+        }
+        return list;
+    }
+
 }
