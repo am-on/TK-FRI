@@ -23,15 +23,20 @@ public class Drevo23Test {
         instance.add("Test2");
     }
 
+    private void addTwoReversed() {
+        instance.add("Test2");
+        instance.add("Test1");
+    }
+
     private void addMany() {
-        instance.add("Test19");
-        instance.add("Test4");
-        instance.add("Test20");
-        instance.add("Test17");
-        instance.add("Test12");
-        instance.add("Test15");
-        instance.add("Test13");
+        instance.add("Test8");
+        instance.add("Test0");
+        instance.add("Test9");
+        instance.add("Test7");
+        instance.add("Test3");
+        instance.add("Test6");
         instance.add("Test5");
+        instance.add("Test1");
     }
 
     private void containsOne() {
@@ -44,27 +49,27 @@ public class Drevo23Test {
     }
 
     private void containsMany() {
-        assertTrue(instance.exists("Test4"));
+        assertTrue(instance.exists("Test0"));
+        assertTrue(instance.exists("Test1"));
+        assertTrue(instance.exists("Test3"));
         assertTrue(instance.exists("Test5"));
-        assertTrue(instance.exists("Test12"));
-        assertTrue(instance.exists("Test13"));
-        assertTrue(instance.exists("Test15"));
-        assertTrue(instance.exists("Test17"));
-        assertTrue(instance.exists("Test19"));
-        assertTrue(instance.exists("Test20"));
+        assertTrue(instance.exists("Test6"));
+        assertTrue(instance.exists("Test7"));
+        assertTrue(instance.exists("Test8"));
+        assertTrue(instance.exists("Test9"));
     }
 
     private void sameMany() {
         assertEquals(8, instance.size());
         containsMany();
-        assertEquals("Test4", instance.removeFirst());
+        assertEquals("Test0", instance.removeFirst());
+        assertEquals("Test1", instance.removeFirst());
+        assertEquals("Test3", instance.removeFirst());
         assertEquals("Test5", instance.removeFirst());
-        assertEquals("Test12", instance.removeFirst());
-        assertEquals("Test13", instance.removeFirst());
-        assertEquals("Test15", instance.removeFirst());
-        assertEquals("Test17", instance.removeFirst());
-        assertEquals("Test19", instance.removeFirst());
-        assertEquals("Test20", instance.removeFirst());
+        assertEquals("Test6", instance.removeFirst());
+        assertEquals("Test7", instance.removeFirst());
+        assertEquals("Test8", instance.removeFirst());
+        assertEquals("Test9", instance.removeFirst());
         assertEquals(0, instance.size());
     }
 
@@ -83,6 +88,22 @@ public class Drevo23Test {
     }
 
     @Test
+    public void testAddThree() {
+
+        addTwo();
+        instance.add("Test3");
+
+        containsTwo();
+        assertTrue(instance.exists("Test3"));
+    }
+
+    @Test
+    public void testAddTwoReversed() {
+        addTwoReversed();
+        containsTwo();
+    }
+
+    @Test
     public void testAddMany() {
         addMany();
         containsMany();
@@ -90,8 +111,46 @@ public class Drevo23Test {
 
     @Test(expected = java.lang.IllegalArgumentException.class)
     public void testAddSameElements() {
-        testAddMany();
-        testAddMany();
+        addOne();
+        addOne();
+    }
+
+
+    // EXISTS test
+
+    @Test
+    public void testExists() {
+        addOne();
+        assertTrue(instance.exists("Test"));
+        assertFalse(instance.exists("Foo"));
+    }
+
+    @Test
+    public void testExistsEmpty() {
+        assertFalse(instance.exists("Foo"));
+    }
+
+    @Test
+    public void testExistsTwo() {
+        addTwo();
+        assertTrue(instance.exists("Test2"));
+        assertTrue(instance.exists("Test1"));
+        assertFalse(instance.exists("Foo"));
+    }
+
+    @Test
+    public void testExistsMany() {
+        addMany();
+        containsMany();
+    }
+
+    @Test
+    public void testExistsSame() {
+        addMany();
+        instance.exists("Foo");
+        instance.exists("Test0");
+        instance.exists("Test9");
+        sameMany();
     }
 
 
@@ -144,7 +203,7 @@ public class Drevo23Test {
     @Test
     public void testDepthTwo() {
         addTwo();
-        assertEquals(1, instance.depth());
+        assertEquals(2, instance.depth());
     }
 
     @Test
@@ -214,9 +273,15 @@ public class Drevo23Test {
     }
 
     @Test
+    public void testGetFirstTwoReversed() {
+        addTwoReversed();
+        assertEquals("Test1", instance.getFirst());
+    }
+
+    @Test
     public void testGetFirstMany() {
         addMany();
-        assertEquals("Test4", instance.getFirst());
+        assertEquals("Test0", instance.getFirst());
     }
 
     @Test
@@ -254,39 +319,51 @@ public class Drevo23Test {
     }
 
     @Test
+    public void testRemoveTwoReversed() {
+        addTwoReversed();
+        assertEquals("Test1", instance.remove("Test1"));
+        assertFalse(instance.exists("Test1"));
+
+        assertEquals("Test2", instance.remove("Test2"));
+        assertFalse(instance.exists("Test2"));
+
+        assertEquals(0, instance.size());
+    }
+
+    @Test
     public void testRemoveMany() {
         addMany();
 
-        assertEquals("Test4", instance.remove("Test4"));
-        assertFalse(instance.exists("Test4"));
+        assertEquals("Test0", instance.remove("Test0"));
+        assertFalse(instance.exists("Test0"));
+
+        assertEquals("Test1", instance.remove("Test1"));
+        assertFalse(instance.exists("Test1"));
+
+        assertEquals("Test3", instance.remove("Test3"));
+        assertFalse(instance.exists("Test3"));
 
         assertEquals("Test5", instance.remove("Test5"));
         assertFalse(instance.exists("Test5"));
 
-        assertEquals("Test12", instance.remove("Test12"));
-        assertFalse(instance.exists("Test12"));
+        assertEquals("Test6", instance.remove("Test6"));
+        assertFalse(instance.exists("Test6"));
 
-        assertEquals("Test13", instance.remove("Test13"));
-        assertFalse(instance.exists("Test13"));
+        assertEquals("Test7", instance.remove("Test7"));
+        assertFalse(instance.exists("Test7"));
 
-        assertEquals("Test15", instance.remove("Test15"));
-        assertFalse(instance.exists("Test15"));
+        assertEquals("Test8", instance.remove("Test8"));
+        assertFalse(instance.exists("Test8"));
 
-        assertEquals("Test17", instance.remove("Test17"));
-        assertFalse(instance.exists("Test17"));
-
-        assertEquals("Test19", instance.remove("Test19"));
-        assertFalse(instance.exists("Test19"));
-
-        assertEquals("Test20", instance.remove("Test20"));
-        assertFalse(instance.exists("Test20"));
+        assertEquals("Test9", instance.remove("Test9"));
+        assertFalse(instance.exists("Test9"));
 
         assertEquals(0, instance.size());
     }
 
     @Test(expected =  java.util.NoSuchElementException.class)
     public void testRemoveUnexistent () {
-        addMany();
+        addTwo();
         instance.remove("Test");
     }
 
@@ -322,29 +399,29 @@ public class Drevo23Test {
     public void testRemoveFirstMany() {
         addMany();
 
-        assertEquals("Test4", instance.removeFirst());
-        assertFalse(instance.exists("Test4"));
+        assertEquals("Test0", instance.removeFirst());
+        assertFalse(instance.exists("Test0"));
+
+        assertEquals("Test1", instance.removeFirst());
+        assertFalse(instance.exists("Test1"));
+
+        assertEquals("Test3", instance.removeFirst());
+        assertFalse(instance.exists("Test3"));
 
         assertEquals("Test5", instance.removeFirst());
         assertFalse(instance.exists("Test5"));
 
-        assertEquals("Test12", instance.removeFirst());
-        assertFalse(instance.exists("Test12"));
+        assertEquals("Test6", instance.removeFirst());
+        assertFalse(instance.exists("Test6"));
 
-        assertEquals("Test13", instance.removeFirst());
-        assertFalse(instance.exists("Test13"));
+        assertEquals("Test7", instance.removeFirst());
+        assertFalse(instance.exists("Test7"));
 
-        assertEquals("Test15", instance.removeFirst());
-        assertFalse(instance.exists("Test15"));
+        assertEquals("Test8", instance.removeFirst());
+        assertFalse(instance.exists("Test8"));
 
-        assertEquals("Test17", instance.removeFirst());
-        assertFalse(instance.exists("Test17"));
-
-        assertEquals("Test19", instance.removeFirst());
-        assertFalse(instance.exists("Test19"));
-
-        assertEquals("Test20", instance.removeFirst());
-        assertFalse(instance.exists("Test20"));
+        assertEquals("Test9", instance.removeFirst());
+        assertFalse(instance.exists("Test9"));
     }
 
 
@@ -370,8 +447,8 @@ public class Drevo23Test {
     @Test
     public void testAsListMany() {
         addMany();
-        assertEquals("[\"Test4\", \"Test5\", \"Test12\", \"Test13\", "
-                            + "\"Test15\", \"Test17\", \"Test19\", \"Test20\"]",
+        assertEquals("[\"Test0\", \"Test1\", \"Test3\", \"Test5\", "
+                            + "\"Test6\", \"Test7\", \"Test8\", \"Test9\"]",
                             instance.asList());
     }
 
