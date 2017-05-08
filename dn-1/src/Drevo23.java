@@ -16,7 +16,7 @@ public class Drevo23 <Tip extends Comparable> implements Seznam<Tip> {
     private class InnerNode extends Node {
         public Tip valueLeft;
         public Tip valueRight;
-        
+
         public Node left;
         public Node middle;
         public Node right;
@@ -125,24 +125,7 @@ public class Drevo23 <Tip extends Comparable> implements Seznam<Tip> {
         } else {
             LeafNode newNode = new LeafNode(null, e);
 
-            Node n = getRoot();
-            while (true) {
-                InnerNode in = (InnerNode) n;
-                if (in.left.getClass() == LeafNode.class) {
-                    break;
-                }
-
-                int cmp = in.compareTo(newNode);
-                if (cmp < 0) {
-                    n = in.left;
-                } else if (cmp == 0) {
-                    n = in.middle;
-                } else {
-                    n = in.right;
-                }
-            }
-
-            InnerNode in = (InnerNode) n;
+            InnerNode in = getLastInnerNode(e);
 
             // right leaf is empty, we can insert in this node
             if (in.canInsert()) {
@@ -255,6 +238,28 @@ public class Drevo23 <Tip extends Comparable> implements Seznam<Tip> {
             }
         }
         size++;
+    }
+
+    private InnerNode getLastInnerNode(Tip e) {
+        Node n = getRoot();
+        LeafNode ln = new LeafNode(null, e);
+        while (true) {
+            InnerNode in = (InnerNode) n;
+            if (in.left.getClass() == LeafNode.class) {
+                break;
+            }
+
+            int cmp = in.compareTo(ln);
+            if (cmp < 0) {
+                n = in.left;
+            } else if (cmp == 0) {
+                n = in.middle;
+            } else {
+                n = in.right;
+            }
+        }
+
+        return (InnerNode) n;
     }
 
     private void insertToParent(InnerNode parent, InnerNode beforeSplit, InnerNode left, InnerNode right) {
@@ -387,7 +392,54 @@ public class Drevo23 <Tip extends Comparable> implements Seznam<Tip> {
                 root = getRoot().middle;
             }
         } else {
-            throw new UnsupportedOperationException("TODO");
+            InnerNode in = getLastInnerNode(e);
+
+            // if node is full just delete value and update inner nodes
+            if (!in.canInsert()) {
+                // deleted element is right in node
+                if (in.valueRight == e) {
+                    value = ((LeafNode)in.right).value;
+
+                    in.valueRight = null;
+                    in.right = null;
+                }
+                // deleted element is middle in node
+                else if (in.valueLeft == e) {
+                    value = ((LeafNode)in.middle).value;
+
+                    // update inner node values
+                    in.valueLeft = in.valueRight;
+                    in.valueRight = null;
+
+                    // move right element to middle
+                    in.middle = in.right;
+                    in.right = null;
+                }
+                // deleted element is left in node
+                else {
+                    value = ((LeafNode)in.left).value;
+
+                    // update inner node values
+                    in.valueLeft = in.valueRight;
+                    in.valueRight = null;
+
+                    // move middle to left
+                    in.left = in.middle;
+
+                    // move right element to middle
+                    in.middle = in.right;
+                    in.right = null;
+
+                    // update upper inner nodes
+                    upperUpdate(in);
+                }
+
+            }
+            // only two elements in inner node, move remaining element to other node, remove this node
+            else {
+                throw new UnsupportedOperationException("TODO");
+            }
+
         }
 
         size--;
