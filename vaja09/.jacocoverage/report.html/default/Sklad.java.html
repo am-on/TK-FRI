@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Sklad.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;PredDN1&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Sklad.java</span></div><h1>Sklad.java</h1><pre class="source lang-java linenums">
+class Element&lt;Tip&gt; {
+
+    public Tip vrednost;
+    public Element&lt;Tip&gt; vezava;
+
+<span class="fc" id="L7">    public Element(Tip e) {</span>
+<span class="fc" id="L8">        this.vrednost = e;</span>
+<span class="fc" id="L9">    }</span>
+}
+
+public class Sklad&lt;Tip&gt; implements Seznam&lt;Tip&gt; {
+
+    private Element&lt;Tip&gt; vrh;
+
+<span class="fc" id="L16">    public Sklad() {</span>
+<span class="fc" id="L17">    }</span>
+
+    public void push(Tip e) {
+<span class="fc" id="L20">        Element&lt;Tip&gt; novVrh = new Element&lt;&gt;(e);</span>
+<span class="fc" id="L21">        novVrh.vezava = vrh;</span>
+<span class="fc" id="L22">        vrh = novVrh;</span>
+<span class="fc" id="L23">    }</span>
+
+    public Tip pop() {
+<span class="fc bfc" id="L26" title="All 2 branches covered.">        if (vrh == null) {</span>
+<span class="fc" id="L27">            throw new java.util.NoSuchElementException();</span>
+        }
+<span class="fc" id="L29">        Tip e = vrh.vrednost;</span>
+<span class="fc" id="L30">        vrh = vrh.vezava;</span>
+<span class="fc" id="L31">        return e;</span>
+    }
+
+    @Override
+    public boolean isEmpty() {
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        return (vrh == null);</span>
+    }
+
+    public Tip peek() {
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        if (isEmpty()) {</span>
+<span class="fc" id="L41">            throw new java.util.NoSuchElementException();</span>
+        }
+<span class="fc" id="L43">        return vrh.vrednost;</span>
+    }
+
+    public int count() {
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (isEmpty()) {</span>
+<span class="fc" id="L48">            return 0;</span>
+        }
+
+<span class="fc" id="L51">        int stElementov = 0;</span>
+<span class="fc" id="L52">        Element&lt;Tip&gt; tmp = vrh;</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        while (tmp != null) {</span>
+<span class="fc" id="L54">            stElementov++;</span>
+<span class="fc" id="L55">            tmp = tmp.vezava;</span>
+        }
+<span class="fc" id="L57">        return stElementov;</span>
+    }
+
+    public boolean top(Tip e) {
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        if (vrh == null) {</span>
+<span class="fc" id="L62">            throw new java.util.NoSuchElementException();</span>
+        }
+<span class="fc" id="L64">        return vrh.vrednost.equals(e);</span>
+    }
+
+    public int search(Tip e) {
+<span class="fc" id="L68">        Element&lt;Tip&gt; tmp = vrh;</span>
+<span class="fc" id="L69">        int i = 0;</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        while (null != tmp) {</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">            if (tmp.vrednost.equals(e)) {</span>
+<span class="fc" id="L72">                return i;</span>
+            }
+<span class="fc" id="L74">            i++;</span>
+<span class="fc" id="L75">            tmp = tmp.vezava;</span>
+        }
+<span class="fc" id="L77">        return -1;</span>
+    }
+
+    @Override
+    public void add(Tip e) {
+<span class="fc" id="L82">        this.push(e);</span>
+<span class="fc" id="L83">    }</span>
+
+    @Override
+    public Tip removeFirst() {
+<span class="fc" id="L87">        return this.pop();</span>
+    }
+
+    @Override
+    public Tip getFirst() {
+<span class="fc" id="L92">        return peek();</span>
+    }
+
+    @Override
+    public int size() {
+<span class="fc" id="L97">        return this.count();</span>
+    }
+
+    @Override
+    public int depth() {
+<span class="fc" id="L102">        return this.count();</span>
+    }
+
+    @Override
+    public Tip remove(Tip e) {
+<span class="fc bfc" id="L107" title="All 2 branches covered.">        if (isEmpty()) {</span>
+<span class="fc" id="L108">            throw new java.util.NoSuchElementException();</span>
+        }
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        if (vrh.vrednost.equals(e)) {</span>
+<span class="fc" id="L111">            vrh = vrh.vezava;</span>
+        } else {
+<span class="fc" id="L113">            Element&lt;Tip&gt; tmp = vrh;</span>
+<span class="fc bfc" id="L114" title="All 4 branches covered.">            while (tmp.vezava != null &amp;&amp; !tmp.vezava.vrednost.equals(e)) {</span>
+<span class="fc" id="L115">                tmp = tmp.vezava;</span>
+            }
+<span class="fc bfc" id="L117" title="All 2 branches covered.">            if (tmp.vezava == null) {</span>
+<span class="fc" id="L118">                throw new java.util.NoSuchElementException();</span>
+            } else {
+<span class="fc" id="L120">                tmp.vezava = tmp.vezava.vezava;</span>
+            }
+        }
+<span class="fc" id="L123">        return e;</span>
+    }
+
+    @Override
+    public boolean exists(Tip e) {
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        return (search(e) != -1);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>
