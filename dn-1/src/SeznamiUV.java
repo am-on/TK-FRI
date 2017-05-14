@@ -12,6 +12,7 @@ public class SeznamiUV {
         seznami.put("pv", new PrioritetnaVrsta<String>());
         seznami.put("sk", new Sklad<String>());
         seznami.put("bst", new Bst<String>());
+        seznami.put("23", new Drevo23<String>());
     }
 
     public String processInput(String input) {

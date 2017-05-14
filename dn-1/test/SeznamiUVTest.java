@@ -74,14 +74,26 @@ public class SeznamiUVTest {
         assertEquals("OK", uv.processInput("use bst"));
         tests();
         testBst(true);
-        testBstDuplicateEntry();
+        testDuplicateEntry();
+        testAsListMany();
+    }
+
+    @Test
+    public void testUse23() {
+        assertEquals("OK", uv.processInput("use 23"));
+        tests();
+        reset();
+        test23(true);
+        testDuplicateEntry();
+
         testAsListMany();
     }
 
 
-    private void testBstDuplicateEntry() {
+    private void testDuplicateEntry() {
         assertEquals("OK", uv.processInput("add Test1"));
         assertEquals("Error: Duplicated entry", uv.processInput("add Test1"));
+        reset();
     }
 
     // *****************
@@ -398,6 +410,27 @@ public class SeznamiUVTest {
         assertEquals("Test2", uv.processInput("remove_first"));
         assertEquals("Test3", uv.processInput("remove_first"));
         assertEquals("Test1", uv.processInput("remove_first"));
+    }
+
+    public void test23(boolean add) {
+        if (add) {
+            testAddTestSequence();
+            assertEquals("OK", uv.processInput("add Test6"));
+            assertEquals("OK", uv.processInput("add Test7"));
+            assertEquals("OK", uv.processInput("add Test8"));
+            assertEquals("OK", uv.processInput("add Test9"));
+            assertEquals("OK", uv.processInput("add Test10"));
+        }
+        assertEquals("Test1", uv.processInput("remove_first"));
+        assertEquals("Test2", uv.processInput("remove_first"));
+        assertEquals("Test3", uv.processInput("remove_first"));
+        assertEquals("Test4", uv.processInput("remove_first"));
+        assertEquals("Test5", uv.processInput("remove_first"));
+        assertEquals("Test6", uv.processInput("remove_first"));
+        assertEquals("Test7", uv.processInput("remove_first"));
+        assertEquals("Test8", uv.processInput("remove_first"));
+        assertEquals("Test9", uv.processInput("remove_first"));
+        assertEquals("Test10", uv.processInput("remove_first"));
     }
 
 }
