@@ -25,6 +25,11 @@ public class SeznamiUV {
         } else {
             return "Error: enter command";
         }
+
+        if (token.equals("exit")) {
+            return "Have a nice day.";
+        }
+
         if (!token.equals("use") && (null == seznam)) {
             return "Error: please specify a data structure (use {pv|sk|bst})";
         }

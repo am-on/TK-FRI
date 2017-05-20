@@ -4,6 +4,7 @@ def test_bst_save_restore():
     baza = pexpect.pexpect()
 
     try:
+
         baza.expect("Enter command: ")
 
         baza.send("use bst")
@@ -56,10 +57,10 @@ def test_bst_save_restore():
         baza.expect("OK")
         baza.expect("Enter command: ")
 
-        print "PASSED\ttest_bst_save_restore"
+        print("PASSED\ttest_bst_save_restore")
 
     except:
-        print "FAILED\ttest_bst_save_restore"
+        print("FAILED\ttest_bst_save_restore")
 
     finally:
         baza.kill()

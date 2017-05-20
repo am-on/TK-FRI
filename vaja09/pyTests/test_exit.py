@@ -9,10 +9,10 @@ def test_exit_no_use():
 
         baza.send("exit")
         baza.expect("Have a nice day.")
-        print "PASSED\ttest_exit_no_use"
+        print("PASSED\ttest_exit_no_use")
 
     except:
-        print "FAILED\ttest_exit_no_use"
+        print("FAILED\ttest_exit_no_use")
 
     finally:
         baza.kill()
@@ -30,10 +30,10 @@ def test_exit_use_bst():
 
         baza.send("exit")
         baza.expect("Have a nice day.")
-        print "PASSED\ttest_exit_use_bst"
+        print("PASSED\ttest_exit_use_bst")
 
     except:
-        print "FAILED\ttest_exit_use_bst"
+        print ("FAILED\ttest_exit_use_bst")
 
     finally:
         baza.kill()
