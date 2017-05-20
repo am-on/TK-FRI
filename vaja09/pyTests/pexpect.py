@@ -3,7 +3,7 @@ import subprocess
 import select
 import time
 import threading
-import Queue
+import queue
 
 def enqueue_output(out, queue):
     c = out.read(1)
@@ -15,13 +15,13 @@ class pexpect:
     def __init__(self):
         commandLine = ["java",
                        "-cp",
-                       "C:\\Users\\"+os.environ['USERNAME']+"\\Documents\\NetBeansProjects\\Seznami\\build\\classes",
+                       "/home/amon/Documents/TK-FRI/vaja09/out/",
                        "PodatkovnaBaza"]
         self.process = subprocess.Popen(commandLine,
                                         stdin=subprocess.PIPE,
                                         stdout=subprocess.PIPE,
                                         stderr=subprocess.STDOUT)
-        self.queue = Queue.Queue()
+        self.queue = queue.Queue()
         self.thread = threading.Thread(target=enqueue_output, args=(self.process.stdout, self.queue))
         self.thread.start()
         self.killable = True
@@ -40,24 +40,30 @@ class pexpect:
         actualString = ""
         readRetries = 0
 
+        time.sleep(0.1)
+
         while (self.queue.empty()):
             time.sleep(0.1)
-            ++readRetries
+            readRetries += 1
             if (readRetries > 100):
                 self.kill()
                 assert False
 
         while not self.queue.empty():
-            actualString += self.queue.get_nowait()
+
+            actualString += bytes.decode(self.queue.get_nowait())
+
             if actualString[-1] == '\n':
                 break
 
+
         actualString = actualString.strip('\n\r')
         if not actualString == expectedString:
-            print "\nERROR: Wrong output received:\n\tExpected: '%s'\n\tActual:   '%s'\n" % (expectedString, actualString)
+            print ("\nERROR: Wrong output received:\n\tExpected: '%s'\n\tActual:   '%s'\n" % (expectedString, actualString))
             self.kill()
             assert False
 
     def send(self, inputString):
-        self.process.stdin.write(inputString + "\n")
+        self.process.stdin.write(bytes(inputString + "\n",'utf-8'))
+        self.process.stdin.flush()
 
