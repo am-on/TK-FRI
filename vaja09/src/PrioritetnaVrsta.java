@@ -1,6 +1,4 @@
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 public class PrioritetnaVrsta<Tip extends Comparable> implements Seznam<Tip> {
 
@@ -17,6 +15,24 @@ public class PrioritetnaVrsta<Tip extends Comparable> implements Seznam<Tip> {
 
     private void bubbleUp() {
         int eltIdx = end - 1;
+        while (eltIdx >= 0) {
+            Tip elt = (Tip) heap[eltIdx];
+            int childIdx = eltIdx * 2 + 1;
+            if (childIdx < end) {
+                Tip child = (Tip) heap[childIdx];
+                if (childIdx + 1 < end && child.compareTo(heap[childIdx + 1]) < 0) {
+                    child = (Tip) heap[++childIdx];
+                }
+                if (elt.compareTo(child) >= 0) {
+                    return;
+                }
+                swap(eltIdx, childIdx);
+            }
+            eltIdx = eltIdx % 2 == 1 ? (eltIdx - 1) / 2 : (eltIdx - 2) / 2;
+        }
+    }
+
+    private void bubbleUp(int eltIdx) {
         while (eltIdx >= 0) {
             Tip elt = (Tip) heap[eltIdx];
             int childIdx = eltIdx * 2 + 1;
@@ -114,28 +130,75 @@ public class PrioritetnaVrsta<Tip extends Comparable> implements Seznam<Tip> {
 
     @Override
     public Tip remove(Tip e) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (this.isEmpty()) {
+            throw new java.util.NoSuchElementException();
+        }
+        Tip del = null;
+        int index = 0;
+        for (int i = 0; i < end; i++) {
+            if (heap[i].equals(e)) {
+                del = (Tip) heap[i];
+                index = i;
+            }
+        }
+
+        if (del == null) throw new java.util.NoSuchElementException();
+
+        heap[index] = heap[0];
+        bubbleUp(index);
+        removeFirst();
+
+        return (Tip) del;
+
     }
 
     @Override
     public boolean exists(Tip e) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (this.isEmpty()) {
+            return false;
+        }
+        for (int i = 0; i < end; i++) {
+            if (heap[i].equals(e)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // manjka toList
 
     @Override
     public void print() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String list = "";
+        for (int i = 0; i < end; i++) {
+            if (heap[i] != null)
+                list +=  heap[i] + " ";
+        }
+        System.out.println(list);
     }
+
 
     @Override
     public void save(OutputStream outputStream) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ObjectOutputStream out = new ObjectOutputStream(outputStream);
+        out.writeInt(this.size());
+
+        for (int i = 0; i < this.size(); i++) {
+            out.writeObject(heap[i]);
+
+        }
+
     }
 
     @Override
-    public void restore(InputStream inputStream) throws IOException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void restore(InputStream inputStream) throws IOException,
+            ClassNotFoundException {
+        ObjectInputStream in = new ObjectInputStream(inputStream);
+        int count = in.readInt();
+        end = count;
+        for (int i = 0; i < this.size(); i++) {
+            heap[i] = in.readObject();
+        }
     }
+
 }
