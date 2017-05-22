@@ -174,7 +174,9 @@ public class PrioritetnaVrsta<Tip extends Comparable> implements Seznam<Tip> {
             if (heap[i] != null)
                 list +=  heap[i] + " ";
         }
-        System.out.println(list);
+        if (list.length() > 0) {
+            System.out.println(list.substring(0, list.length()-1));
+        }
     }
 
 
