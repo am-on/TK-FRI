@@ -1,6 +1,4 @@
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 class Element<Tip> {
 
@@ -119,16 +117,47 @@ public class Sklad<Tip> implements Seznam<Tip> {
 
     @Override
     public void print() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        print(vrh);
+    }
+
+    private void print(Element node) {
+        if (node == null) return;
+        System.out.print(node.vrednost + " ");
+        print(node.vezava);
     }
 
     @Override
     public void save(OutputStream outputStream) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ObjectOutputStream out = new ObjectOutputStream(outputStream);
+        out.writeInt(this.size());
+        Element<Tip> tmp = vrh;
+        save(tmp, out);
+    }
+    private void save(Element node, ObjectOutputStream out) throws
+            IOException {
+        if (node == null)
+            return;
+
+        out.writeObject(node.vrednost);
+        save(node.vezava, out);
     }
 
     @Override
-    public void restore(InputStream inputStream) throws IOException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void restore(InputStream inputStream) throws IOException,
+            ClassNotFoundException {
+        ObjectInputStream in = new ObjectInputStream(inputStream);
+        int count = in.readInt();
+        vrh = null;
+        restore(in, count);
+    }
+
+    private void restore(ObjectInputStream in, int count) throws
+            IOException, ClassNotFoundException {
+        if (count == 0) return;
+
+        Element node = new Element((Tip) in.readObject());
+        node.vezava = vrh;
+        vrh = node;
+        restore(in, count-1);
     }
 }
