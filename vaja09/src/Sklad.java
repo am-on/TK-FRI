@@ -122,7 +122,7 @@ public class Sklad<Tip> implements Seznam<Tip> {
 
     private void print(Element node) {
         if (node == null) return;
-        System.out.print(node.vrednost + " ");
+        System.out.println(node.vrednost);
         print(node.vezava);
     }
 
@@ -138,8 +138,8 @@ public class Sklad<Tip> implements Seznam<Tip> {
         if (node == null)
             return;
 
-        out.writeObject(node.vrednost);
         save(node.vezava, out);
+        out.writeObject(node.vrednost);
     }
 
     @Override
