@@ -2,6 +2,11 @@ import java.io.*;
 public class PodatkovnaBaza {
     public static void main(String[] args) {
         SeznamiUV seznamiUV = new SeznamiUV();
+
+        seznamiUV.addImpl("sk", new Sklad<String>());
+        seznamiUV.addImpl("pv", new PrioritetnaVrsta<String>());
+        seznamiUV.addImpl("bst", new Bst<String>());
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String input;
         String output;

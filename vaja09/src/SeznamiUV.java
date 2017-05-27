@@ -8,12 +8,16 @@ public class SeznamiUV {
 
     HashMap<String, Seznam<String>> seznami;
     Seznam<String> seznam;
+    private String outOfMemoryError = "Error: not enough memory";
 
     public SeznamiUV() {
         seznami = new HashMap<>();
-        seznami.put("pv", new PrioritetnaVrsta<String>());
-        seznami.put("sk", new Sklad<String>());
-        seznami.put("bst", new Bst<String>());
+
+
+    }
+
+    public void addImpl(String key, Seznam<String> seznam) {
+        seznami.put(key, seznam);
     }
 
     public String processInput(String input) {
@@ -117,6 +121,8 @@ public class SeznamiUV {
             result = "Error: IO error " + e.getMessage();
         } catch (ClassNotFoundException e) {
             result = "Error: Unknown format";
+        } catch (Exception e) {
+            System.out.println(e.toString());
         }
 
         return result;

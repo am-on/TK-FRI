@@ -1,5 +1,12 @@
 
+import org.easymock.EasyMock;
 import org.junit.*;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
 public class SeznamiUVTest {
@@ -12,6 +19,9 @@ public class SeznamiUVTest {
     @Before
     public void setUp() {
         uv = new SeznamiUV();
+        uv.addImpl("sk", new Sklad<String>());
+        uv.addImpl("pv", new PrioritetnaVrsta<String>());
+        uv.addImpl("bst", new Bst<String>());
     }
 
     @Test
@@ -49,6 +59,41 @@ public class SeznamiUVTest {
         testBst(false);
         assertEquals("OK", uv.processInput("use sk"));
         testSklad(false);
+    }
+
+    @Ignore
+    @Test
+    public void testSaveOnFullDisk() {
+
+        uv.processInput("use sk");
+        String str = "Long string to fill disk...";
+        for (int i = 0; i < 1000; i++) {
+            uv.processInput("add " + str);
+        }
+        assertEquals("Error: IO error No space left on device", uv.processInput("save x"));
+    }
+
+    @Test
+    public void testSaveError() {
+        uv.addImpl("skMock", new SkladMock());
+        uv.processInput("use skMock");
+        assertEquals("Error: IO error No space left on device", uv.processInput("save x"));
+    }
+
+    @Test
+    public void testSaveErrorEasyMock() throws IOException {
+
+        Sklad mock = EasyMock.createMock(Sklad.class);
+        mock.save(EasyMock.anyObject(OutputStream.class));
+        EasyMock.expectLastCall().andThrow(new IOException("No space left on device")).atLeastOnce();
+        replay(mock);
+
+        uv.addImpl("skEasyMock", mock);
+        uv.processInput("use skEasyMock");
+
+        assertEquals("Error: IO error No space left on device", uv.processInput("save x"));
+
+        verify(mock);
     }
 
 
