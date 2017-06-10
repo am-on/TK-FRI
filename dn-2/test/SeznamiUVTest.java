@@ -605,6 +605,16 @@ public class SeznamiUVTest {
 
     // TODO: I/O tests
 
+/*    @Test
+    public void testAddMemoryFullMock() {
+        uv.addImpl("skmock", new SkladMock<Prijatelj>(), new SkladMock<Prijatelj>());
+        assertEquals("OK", uv.processInput("use skmock"));
+        assertEquals("Error: not enough memory, operation failed",
+                uv.processInput("add Ime Priimek TelefonskaStevilka"));
+    }*/
+
+
+
 
     // print
 
@@ -669,6 +679,28 @@ public class SeznamiUVTest {
         reset();
     }
 
+    // reset
+
+    @Test public void testReset() {
+        testAddFiveStudents();
+        count(5);
+
+        assertEquals("Are you sure (y|n): ", uv.processInput("reset"));
+        assertEquals("OK", uv.processInput("y"));
+
+        count(0);
+
+    }
+
+    @Test public void testResetCancelled() {
+        testAddFiveStudents();
+        count(5);
+
+        assertEquals("Are you sure (y|n): ", uv.processInput("reset"));
+        uv.processInput("n");
+
+        count(5);
+    }
 
 
     // other
@@ -694,7 +726,7 @@ public class SeznamiUVTest {
         DecimalFormat df = new DecimalFormat("#.##");
 
         String[] data = new String[4];
-        data[0] = "631502" + rnd.nextInt();
+        data[0] = "631502" + Math.abs(rnd.nextInt());
         data[1] = "ImeStudenta" + randomString(rnd);
         data[2] = "PriimekStudenta" + randomString(rnd);
         data[3] = df.format(rnd.nextFloat()*10);

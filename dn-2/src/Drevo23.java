@@ -1,4 +1,5 @@
 import java.util.Vector;
+import java.util.Comparator;
 
 /**
  * Created by amon on 22.4.2017.
@@ -33,16 +34,19 @@ public class Drevo23 <Tip extends Comparable> implements Seznam<Tip> {
         public int compareTo(Object o) {
             if (o.getClass() == this.getClass()) {
                 InnerNode in = (InnerNode)o;
-                return valueLeft.compareTo(in.valueLeft);
+                //return valueLeft.compareTo(in.valueLeft);
+                return comparator.compare(valueLeft, in.valueLeft);
             } else if (o.getClass() == LeafNode.class) {
                 LeafNode ln = (LeafNode)o;
 
                 // ln is smaller than valueLeft
-                if (valueLeft.compareTo(ln.value) > 0) {
+                //if (valueLeft.compareTo(ln.value) > 0) {
+                if (comparator.compare(valueLeft, ln.value) > 0) {
                     return -1;
                 }
                 // if valueRight is set and ln is larger, go right
-                else if (valueRight != null && valueRight.compareTo(ln.value) <= 0) {
+                //else if (valueRight != null && valueRight.compareTo(ln.value) <= 0) {
+                else if (valueRight != null && comparator.compare(valueRight, ln.value) <= 0) {
                     return 1;
                 }
                 // go middle
@@ -69,10 +73,12 @@ public class Drevo23 <Tip extends Comparable> implements Seznam<Tip> {
         public int compareTo(Object o) {
             if (o.getClass() == this.getClass()) {
                 LeafNode ln = (LeafNode)o;
-                return value.compareTo(ln.value);
+                //return value.compareTo(ln.value);
+                return comparator.compare(value, ln.value);
             } else if (o.getClass() == InnerNode.class) {
                 InnerNode in = (InnerNode)o;
-                return value.compareTo(in.valueLeft);
+                //return value.compareTo(in.valueLeft);
+                return comparator.compare(value, in.valueLeft);
             }
             return 0;
         }
@@ -84,8 +90,10 @@ public class Drevo23 <Tip extends Comparable> implements Seznam<Tip> {
 
     private Node root;
     private int size;
+    private Comparator<Tip> comparator;
 
-    Drevo23() {
+    Drevo23(Comparator<Tip> comparator) {
+        this.comparator = comparator;
         root = null;
         size = 0;
     }

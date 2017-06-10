@@ -5,8 +5,16 @@ import java.util.HashMap;
 public class SeznamiUV {
     Seznam<String> seznam;
 
+    Seznam<Student> seznamByName;
+    Seznam<Student> seznamById;
+
+    String[] studentBuffer;
+    int addPhase = -1;
+    boolean inputError = false;
+
     public SeznamiUV() {
-        seznam = new Drevo23<String>();
+        seznamById = new Drevo23<Student>(new StudentCompareID());
+        seznamByName = new Drevo23<Student>(new StudentCompareNames());
     }
 
     public String processInput(String input) {
@@ -19,16 +27,45 @@ public class SeznamiUV {
         } else {
             return "Error: enter command";
         }
-        if (!token.equals("use") && (null == seznam)) {
-            return "Error: please specify a data structure (use {pv|sk|bst})";
-        }
         try {
-            if (token.equals("add")) {
-                if (sc.hasNext()) {
-                    seznam.add(sc.next());
-                } else {
-                    result = "Error: please specify a string";
+            if (addPhase >= 0) {
+                String inputStr = sc.hasNext() ? sc.next() : "";
+                studentBuffer[addPhase++] = inputStr;
+                switch (addPhase) {
+                    case 1:
+                        result = "First name: ";
+                        break;
+                    case 2:
+                        result = "Last name: ";
+                        break;
+                    case 3:
+                        result = "Avg. grade: ";
+                        break;
+                    default:
+                        break;
                 }
+
+                if (addPhase >= 4) {
+                    Student st = new Student(studentBuffer);
+                    if(st.validate()) {
+                        if (seznamById.exists(st) || seznamByName.exists(st)) {
+                            result = "Student already exists";
+                        } else {
+                            seznamById.add(st);
+                            seznamByName.add(st);
+                            result = "OK";
+                        }
+                    } else {
+                        result = "Invalid input data";
+                    }
+                    addPhase = -1;
+                }
+
+            } else if (token.equals("add")) {
+                addPhase = 0;
+                studentBuffer = new String[4];
+                result = "Student ID: ";
+
             } else if (token.equals("remove_first")) {
                 result = seznam.removeFirst();
             } else if (token.equals("get_first")) {
