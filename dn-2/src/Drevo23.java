@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.Vector;
 import java.util.Comparator;
 
@@ -120,7 +121,7 @@ public class Drevo23 <Tip extends Comparable> implements Seznam<Tip> {
             l1.parent = root;
             l2.parent = root;
 
-            if (l1.compareTo(l2) < 0) {
+            if (comparator.compare(l1.value, l2.value) < 0) {
                 getRoot().valueLeft = l2.value;
                 getRoot().left = l1;
                 getRoot().middle = l2;
@@ -391,7 +392,8 @@ public class Drevo23 <Tip extends Comparable> implements Seznam<Tip> {
             value = ((LeafNode)root).value;
             root = null;
         } else if (size == 2) {
-            if (getRoot().valueLeft.equals(e)) {
+//            if (getRoot().valueLeft.equals(e)) {
+            if(comparator.compare(getRoot().valueLeft, e) == 0) {
                 value = (((LeafNode)getRoot().middle).value);
                 root = getRoot().left;
             } else {
@@ -800,7 +802,8 @@ public class Drevo23 <Tip extends Comparable> implements Seznam<Tip> {
         if (size == 0) {
             return false;
         } else if (size == 1) {
-            return e.equals(((LeafNode)root).value);
+//            return e.equals(((LeafNode)root).value);
+            return comparator.compare(((LeafNode)root).value, e) == 0;
         }
 
         LeafNode leafE = new LeafNode(null, e);
@@ -822,17 +825,45 @@ public class Drevo23 <Tip extends Comparable> implements Seznam<Tip> {
 
     }
 
+
+    public Tip get(Tip e) {
+        if (size == 0) {
+            return null;
+        } else if (size == 1) {
+//            return e.equals(((LeafNode)root).value);
+            return comparator.compare(((LeafNode)root).value, e) == 0 ? ((LeafNode) root).value : null;
+        }
+
+        LeafNode leafE = new LeafNode(null, e);
+
+        Node n = root;
+
+        while (n.getClass() == InnerNode.class) {
+            int cmp = n.compareTo(leafE);
+            if (cmp < 0) {
+                n = ((InnerNode)n).left;
+            } else if (cmp == 0) {
+                n = ((InnerNode)n).middle;
+            } else {
+                n = ((InnerNode)n).right;
+            }
+        }
+
+        return leafE.compareTo(n) == 0 ? ((LeafNode)n).value : null;
+
+    }
+
     @Override
     public String asList() {
         if (isEmpty()) {
-            return "[ ]";
+            return "";
         }
         if (size() == 1) {
-            return "[\"" + ((LeafNode)root) + "\", ]";
+            return "\t" + ((LeafNode)root);
         }
         String list = asListElements(root);
-        list = list.substring(0, list.length()-2);
-        return "[" + list + "]";
+        list = list.substring(0, list.length()-1);
+        return list;
     }
 
     private String asListElements(Node n) {
@@ -840,10 +871,42 @@ public class Drevo23 <Tip extends Comparable> implements Seznam<Tip> {
             return "";
         }
         if (n.getClass() == LeafNode.class) {
-            return "\"" + n.toString() + "\", ";
+            return "\t" + n.toString() + "\n";
         }
         InnerNode in = (InnerNode) n;
 
         return asListElements(in.left) + asListElements(in.middle) + asListElements(in.right);
     }
+
+
+    @Override
+    public void save(OutputStream outputStream) throws IOException {
+        ObjectOutputStream out = new ObjectOutputStream(outputStream);
+        out.writeInt(this.size());
+        save(root, out);
+    }
+    private void save(Node node, ObjectOutputStream out) throws IOException {
+        if (node == null)
+            return;
+
+        if (node.getClass() == LeafNode.class) {
+            out.writeObject(((LeafNode)node).value);
+            return;
+        }
+        InnerNode in = (InnerNode) node;
+
+        save(in.left, out);
+        save(in.middle, out);
+        save(in.right, out);
+    }
+
+    @Override
+    public void restore(InputStream inputStream) throws IOException, ClassNotFoundException {
+        ObjectInputStream in = new ObjectInputStream(inputStream);
+        int count = in.readInt();
+        for (int i = 0; i < count; i++) {
+            add((Tip) in.readObject());
+        }
+    }
+
 }

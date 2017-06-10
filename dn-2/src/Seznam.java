@@ -1,3 +1,6 @@
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public interface Seznam<Tip> {
 
@@ -27,5 +30,10 @@ public interface Seznam<Tip> {
 
     // izpis elementov kot seznam
     String asList();
+
+    void save(OutputStream outputStream) throws IOException;
+
+    void restore(InputStream inputStream) throws IOException,
+            ClassNotFoundException;
 
 }

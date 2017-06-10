@@ -7,7 +7,13 @@ class StudentCompareNames implements java.util.Comparator<Student>
     {
         String name1 = o1.getLastName() + ", " + o1.getFirstName();
         String name2 = o2.getLastName() + ", " + o2.getFirstName();
-        return name1.compareToIgnoreCase(name2);
+        int cmp = name1.compareTo(name2);
+        if (cmp < 0) {
+            return -1;
+        } else if (cmp > 0) {
+            return 1;
+        }
+        return 0;
     }
 }
 
@@ -19,9 +25,13 @@ class StudentCompareID implements java.util.Comparator<Student>
         String s1 = o1.getId();
         String s2 = o2.getId();
 
-        s1 = s1.substring(s1.length()-8);
-        s2 = s2.substring(s2.length()-8);
-        return -s1.compareTo(s2);
+        int cmp = s1.compareTo(s2);
+        if (cmp < 0) {
+            return -1;
+        } else if (cmp > 0) {
+            return 1;
+        }
+        return 0;
     }
 }
 
@@ -104,7 +114,7 @@ public class Student implements Serializable, Comparable {
     public String toString()
     {
         // 63110159 | Anderlič, Boris| 5.3
-        return id + " | " + lastName + ", " + firstName + " | " + id;
+        return id + " | " + lastName + ", " + firstName + " | " + score;
     }
 
     @Override

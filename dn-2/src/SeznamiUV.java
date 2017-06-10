@@ -1,20 +1,31 @@
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.HashMap;
 
 public class SeznamiUV {
-    Seznam<String> seznam;
 
     Seznam<Student> seznamByName;
     Seznam<Student> seznamById;
 
-    String[] studentBuffer;
+    String[] studentBuffer = new String[4];
     int addPhase = -1;
-    boolean inputError = false;
+    int resetPhase = -1;
+    int removePhase = -1;
+    int searchPhase = -1;
+
 
     public SeznamiUV() {
         seznamById = new Drevo23<Student>(new StudentCompareID());
         seznamByName = new Drevo23<Student>(new StudentCompareNames());
+    }
+
+    public void setMockObj(Seznam<Student> mock) {
+        seznamByName = mock;
+        seznamById = mock;
     }
 
     public String processInput(String input) {
@@ -25,12 +36,17 @@ public class SeznamiUV {
         if (sc.hasNext()) {
             token = sc.next();
         } else {
-            return "Error: enter command";
+            if (addPhase < 0 && removePhase < 0 && searchPhase < 0)
+                return "Invalid command";
+            else
+                token = "";
         }
         try {
             if (addPhase >= 0) {
-                String inputStr = sc.hasNext() ? sc.next() : "";
-                studentBuffer[addPhase++] = inputStr;
+                while (sc.hasNextLine()) {
+                    token += sc.nextLine();
+                }
+                studentBuffer[addPhase++] = token;
                 switch (addPhase) {
                     case 1:
                         result = "First name: ";
@@ -61,43 +77,123 @@ public class SeznamiUV {
                     addPhase = -1;
                 }
 
+            } else if (resetPhase > 0) {
+                if (token.equals("y")) {
+                    while (!seznamByName.isEmpty()) {
+                        seznamByName.removeFirst();
+                    }
+                    while (!seznamById.isEmpty()) {
+                        seznamById.removeFirst();
+                    }
+                }
+                result = "OK";
+                resetPhase = -1;
+            } else if (removePhase > 0) {
+                while (sc.hasNextLine()) {
+                    token += sc.nextLine();
+                }
+                studentBuffer[removePhase++] = token;
+                if (removePhase == 2) {
+                    return "Last name: ";
+                }
+                studentBuffer[0] = "6315";
+                studentBuffer[3] = "5.2";
+                removePhase = -1;
+                Student toRemove = new Student(studentBuffer);
+
+                if (!toRemove.validate()) {
+                    return "Invalid input data";
+                } else if (seznamByName.exists(toRemove)) {
+                    toRemove = seznamByName.remove(toRemove);
+                    seznamById.remove(toRemove);
+                } else {
+                    return "Student does not exists";
+                }
+
+            } else if (searchPhase > 0) {
+                while (sc.hasNextLine()) {
+                    token += sc.nextLine();
+                }
+                    studentBuffer[searchPhase++] = token;
+                    if (searchPhase == 2) {
+                        return "Last name: ";
+                    }
+                    studentBuffer[0] = "6315";
+                    studentBuffer[3] = "5.2";
+                    searchPhase = -1;
+                    Student toFind = new Student(studentBuffer);
+
+                    if (!toFind.validate()) {
+                        return "Invalid input data";
+                    } else if (seznamByName.exists(toFind)) {
+                        toFind = (Student) ((Drevo23)seznamByName).get(toFind);
+                        return "\t" + toFind;
+                    } else {
+                        return "Student does not exists";
+                    }
+
             } else if (token.equals("add")) {
                 addPhase = 0;
                 studentBuffer = new String[4];
                 result = "Student ID: ";
 
-            } else if (token.equals("remove_first")) {
-                result = seznam.removeFirst();
-            } else if (token.equals("get_first")) {
-                result = seznam.getFirst();
-            } else if (token.equals("size")) {
-                result = seznam.size() + "";
-            } else if (token.equals("depth")) {
-                result = seznam.depth() + "";
-            } else if (token.equals("is_empty")) {
-                result = "Data structure is " + (seznam.isEmpty() ? "" : "not ") + "empty.";
+            } else if (token.equals("count")) {
+                result = "No. of students: " + seznamByName.size();
             } else if (token.equals("reset")) {
-                while (!seznam.isEmpty()) {
-                    seznam.removeFirst();
-                }
-            } else if (token.equals("exists")) {
+                result = "Are you sure (y|n): ";
+                resetPhase = 1;
+            } else if (token.equals("search")) {
                 if (sc.hasNext()) {
-                    result = "Element " + (seznam.exists(sc.next()) ? "exists " : "doesn't exist ") + "in data structure.";
+                    String id = sc.next();
+                    Student toFind = new Student(id, "fn", "ln", "5.2");
+                    if (!toFind.validate()) {
+                        return "Invalid input data";
+                    }
+                    if (seznamById.exists(toFind)) {
+                        toFind = (Student) ((Drevo23)seznamById).get(toFind);
+                        return "\t" + toFind.toString();
+                    } else {
+                        return "Student does not exists";
+                    }
                 } else {
-                    result = "Error: please specify a string";
+                    searchPhase = 1;
+                    return "First name: ";
                 }
             } else if (token.equals("remove")) {
                 if (sc.hasNext()) {
-                    String next = sc.next();
-                    if (!seznam.exists(next))
-                        result = "Error: can't remove element that doesn't exist in data structure.";
-                    else
-                        result = seznam.remove(next);
+                    String id = sc.next();
+                    Student toRemove = new Student(id, "fn", "ln", "5.2");
+                    if (!toRemove.validate()) {
+                        return "Invalid input data";
+                    } else if(seznamById.exists(toRemove)) {
+                        toRemove = seznamById.remove(toRemove);
+                        seznamByName.remove(toRemove);
+                        return "OK";
+                    } else {
+                        return "Student does not exists";
+                    }
                 } else {
-                    result = "Error: please specify a string";
+                    removePhase = 1;
+                    return "First name: ";
                 }
-            } else if (token.equals("asList")) {
-                result = seznam.asList();
+            } else if (token.equals("print")) {
+                result = "No. of students: " + seznamByName.size();
+                result += seznamByName.size() > 0 ? "\n" + seznamByName.asList() : "";
+            }else if (token.equals("save")) {
+                if (sc.hasNext()) {
+                    seznamByName.save(new FileOutputStream(sc.next()));
+                } else {
+                    result = "Invalid command";
+                }
+
+            } else if (token.equals("restore")) {
+                if (sc.hasNext()) {
+                    String filename = sc.next();
+                    seznamByName.restore(new FileInputStream(filename));
+                    seznamById.restore(new FileInputStream(filename));
+                } else {
+                    result = "Invalid command";
+                }
             } else {
                 result = "Error: invalid command";
             }
@@ -105,6 +201,12 @@ public class SeznamiUV {
             result = "Error: Duplicated entry";
         } catch (java.util.NoSuchElementException e) {
             result = "Error: data structure is empty";
+        } catch (FileNotFoundException e) {
+            result = "I/O Error: " + e.getMessage();
+        } catch (IOException e) {
+            result = "I/O Error: " + e.getMessage();
+        } catch (ClassNotFoundException e) {
+            result = "Error: " + e.getMessage();
         }
         return result;
     }

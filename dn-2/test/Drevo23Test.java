@@ -13,6 +13,12 @@ class StringComparator implements Comparator<String> {
 
     @Override
     public int compare(String s1, String s2) {
+        if (s1 == null) {
+            s1 = "";
+        }
+        if (s2 == null) {
+            s2 = "";
+        }
         return s1.compareTo(s2);
     }
 }
@@ -131,7 +137,7 @@ public class Drevo23Test {
         instance.add("Test0");
         instance.add("Test9");
         instance.add("Test7");
-        assertEquals("[\"Test0\", \"Test7\", \"Test8\", \"Test9\"]", instance.asList());
+        assertEquals("\tTest0\n\tTest7\n\tTest8\n\tTest9", instance.asList());
     }
 
     @Test
@@ -145,7 +151,7 @@ public class Drevo23Test {
 
         instance.asList();
 
-        assertEquals("[\"Test0\", \"Test3\", \"Test6\", \"Test7\", \"Test8\", \"Test9\"]", instance.asList());
+        assertEquals("\tTest0\n\tTest3\n\tTest6\n\tTest7\n\tTest8\n\tTest9", instance.asList());
     }
 
     @Test
@@ -162,7 +168,7 @@ public class Drevo23Test {
         instance.add("c");
         instance.add("b");
         instance.add("a");
-        assertEquals("[\"a\", \"b\", \"c\", \"d\", \"e\", \"f\", \"g\", \"h\", \"i\", \"j\", \"k\", \"l\"]", instance.asList());
+        assertEquals("\ta\n\tb\n\tc\n\td\n\te\n\tf\n\tg\n\th\n\ti\n\tj\n\tk\n\tl", instance.asList());
     }
 
     @Test
@@ -179,7 +185,7 @@ public class Drevo23Test {
         instance.add("h");
         instance.add("f");
         instance.add("g");
-        assertEquals("[\"a\", \"b\", \"c\", \"d\", \"e\", \"f\", \"g\", \"h\", \"i\", \"j\", \"k\", \"l\"]", instance.asList());
+        assertEquals("\ta\n\tb\n\tc\n\td\n\te\n\tf\n\tg\n\th\n\ti\n\tj\n\tk\n\tl", instance.asList());
     }
 
     // EXISTS test
@@ -445,19 +451,19 @@ public class Drevo23Test {
         instance.add("h");
 
         assertEquals("h", instance.remove("h"));
-        assertEquals("[\"a\", \"b\", \"c\", \"d\", \"e\", \"f\", \"g\"]", instance.asList());
+        assertEquals("\ta\n\tb\n\tc\n\td\n\te\n\tf\n\tg", instance.asList());
         assertEquals("g", instance.remove("g"));
-        assertEquals("[\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"]", instance.asList());
+        assertEquals("\ta\n\tb\n\tc\n\td\n\te\n\tf", instance.asList());
         assertEquals("f", instance.remove("f"));
-        assertEquals("[\"a\", \"b\", \"c\", \"d\", \"e\"]", instance.asList());
+        assertEquals("\ta\n\tb\n\tc\n\td\n\te", instance.asList());
         assertEquals("e", instance.remove("e"));
-        assertEquals("[\"a\", \"b\", \"c\", \"d\"]", instance.asList());
+        assertEquals("\ta\n\tb\n\tc\n\td", instance.asList());
         assertEquals("d", instance.remove("d"));
-        assertEquals("[\"a\", \"b\", \"c\"]", instance.asList());
+        assertEquals("\ta\n\tb\n\tc", instance.asList());
         assertEquals("c", instance.remove("c"));
-        assertEquals("[\"a\", \"b\"]", instance.asList());
+        assertEquals("\ta\n\tb", instance.asList());
         assertEquals("b", instance.remove("b"));
-        assertEquals("[\"a\", ]", instance.asList());
+        assertEquals("\ta\n\t]", instance.asList());
         assertEquals("a", instance.remove("a"));
     }
 
@@ -473,15 +479,15 @@ public class Drevo23Test {
         instance.add("h");
 
         assertEquals("d", instance.remove("d"));
-        assertEquals("[\"a\", \"b\", \"c\", \"e\", \"f\", \"g\", \"h\"]", instance.asList());
+        assertEquals("\ta\n\tb\n\tc\n\te\n\tf\n\tg\n\th", instance.asList());
         assertEquals("c", instance.remove("c"));
-        assertEquals("[\"a\", \"b\", \"e\", \"f\", \"g\", \"h\"]", instance.asList());
+        assertEquals("\ta\n\tb\n\te\n\tf\n\tg\n\th", instance.asList());
         assertEquals("e", instance.remove("e"));
-        assertEquals("[\"a\", \"b\", \"f\", \"g\", \"h\"]", instance.asList());
+        assertEquals("\ta\n\tb\n\tf\n\tg\n\th", instance.asList());
         assertEquals("b", instance.remove("b"));
-        assertEquals("[\"a\", \"f\", \"g\", \"h\"]", instance.asList());
+        assertEquals("\ta\n\tf\n\tg\n\th", instance.asList());
         assertEquals("f", instance.remove("f"));
-        assertEquals("[\"a\", \"g\", \"h\"]", instance.asList());
+        assertEquals("\ta\n\tg\n\th", instance.asList());
     }
 
 
@@ -552,27 +558,26 @@ public class Drevo23Test {
 
     @Test
     public void testAsListEmpty() {
-        assertEquals("[ ]", instance.asList());
+        assertEquals("", instance.asList());
     }
 
     @Test
     public void testAsListOne() {
         addOne();
-        assertEquals("[\"Test\", ]", instance.asList());
+        assertEquals("\tTest", instance.asList());
     }
 
     @Test
     public void testAsListTwo() {
         addTwo();
-        assertEquals("[\"Test1\", \"Test2\"]", instance.asList());
+        assertEquals("\tTest1\n\tTest2", instance.asList());
     }
 
     @Test
     public void testAsListMany() {
         addMany();
-        assertEquals("[\"Test0\", \"Test1\", \"Test3\", \"Test5\", "
-                            + "\"Test6\", \"Test7\", \"Test8\", \"Test9\"]",
-                            instance.asList());
+        assertEquals("\tTest0\n\tTest1\n\tTest3\n\tTest5\n\tTest6\n\tTest7\n\tTest8\n\tTest9",
+                instance.asList());
     }
 
     @Test

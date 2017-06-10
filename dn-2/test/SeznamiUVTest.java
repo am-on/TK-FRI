@@ -1,9 +1,15 @@
 
+import org.easymock.EasyMock;
 import org.junit.*;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.util.Random;
 
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.*;
 
 public class SeznamiUVTest {
@@ -18,11 +24,13 @@ public class SeznamiUVTest {
         uv = new SeznamiUV();
     }
 
+
     @Test
     public void testNoCommand() {
         assertEquals("Invalid command", uv.processInput(""));
     }
 
+    @Ignore
     @Test
     public void testAll() {
         tests();
@@ -258,6 +266,7 @@ public class SeznamiUVTest {
 
     @Test
     public void testRemoveManyById() {
+
         String[] data1 = addStudent(5);
         String[] data2 = addStudent(6);
         String[] data3 = addStudent(7);
@@ -290,21 +299,21 @@ public class SeznamiUVTest {
 
     @Test
     public void testRemoveManyByName() {
-        String[] data1 = addStudent(5);
-        String[] data2 = addStudent(6);
-        String[] data3 = addStudent(7);
-        String[] data4 = addStudent(8);
-
-        removeByName(data1);
-        count(3);
-
-        removeByName(data2);
-        count(2);
-
-        removeByName(data3);
-        count(1);
+        String[] data1 = addStudent(8);
+        String[] data2 = addStudent(9);
+        String[] data3 = addStudent(10);
+        String[] data4 = addStudent(11);
 
         removeByName(data4);
+        count(3);
+
+        removeByName(data3);
+        count(2);
+
+        removeByName(data2);
+        count(1);
+
+        removeByName(data1);
         count(0);
 
         removeById(data1, "Student does not exists");
@@ -392,11 +401,11 @@ public class SeznamiUVTest {
     }
 
     private void searchById(String[] data) {
-        assertEquals(searchResult(data), uv.processInput("remove " + data[0]));
+        assertEquals(searchResult(data), uv.processInput("search " + data[0]));
     }
 
     private void searchById(String[] data, String lastMsg) {
-        assertEquals(lastMsg, uv.processInput("remove " + data[0]));
+        assertEquals(lastMsg, uv.processInput("search " + data[0]));
     }
 
     @Test
@@ -408,7 +417,7 @@ public class SeznamiUVTest {
     @Test
     public void testSearchOnEmptyByName() {
         String[] data = randomData(5);
-        removeByName(data, "Student does not exists");
+        searchByName(data, "Student does not exists");
         reset();
     }
 
@@ -591,10 +600,13 @@ public class SeznamiUVTest {
     public void testRestore() {
         testAddFiveStudents();
         assertEquals("OK", uv.processInput("save students.bin"));
+
+        reset();
+
         assertEquals("OK", uv.processInput("restore students.bin"));
 
         for (int i = 0; i < 5; i++) {
-            String[] data = addStudent(5+i);
+            String[] data = randomData(5+i);
             searchByName(data);
         }
 
@@ -603,17 +615,53 @@ public class SeznamiUVTest {
         reset();
     }
 
-    // TODO: I/O tests
+    @Test
+    public void countEasyMock() throws IOException {
 
-/*    @Test
-    public void testAddMemoryFullMock() {
-        uv.addImpl("skmock", new SkladMock<Prijatelj>(), new SkladMock<Prijatelj>());
-        assertEquals("OK", uv.processInput("use skmock"));
-        assertEquals("Error: not enough memory, operation failed",
-                uv.processInput("add Ime Priimek TelefonskaStevilka"));
-    }*/
+        Drevo23<Student> mock = EasyMock.createMock(Drevo23.class);
+        mock.size();
+        EasyMock.expectLastCall().andReturn(0).atLeastOnce();
+        replay(mock);
+
+        uv.setMockObj(mock);
+
+        assertEquals("No. of students: 0", uv.processInput("count"));
+
+        verify(mock);
+    }
 
 
+    // I/O tests
+
+    @Test
+    public void testSaveErrorEasyMock() throws IOException {
+
+        Drevo23<Student> mock = EasyMock.createMock(Drevo23.class);
+        mock.save(EasyMock.anyObject(OutputStream.class));
+        EasyMock.expectLastCall().andThrow(new IOException("No space left on device")).atLeastOnce();
+        replay(mock);
+
+        uv.setMockObj(mock);
+
+        assertEquals("I/O Error: No space left on device", uv.processInput("save x"));
+
+        verify(mock);
+    }
+
+
+    @Test
+    public void testRestoreErrorEasyMock() throws IOException, ClassNotFoundException {
+        Drevo23<Student> mock = EasyMock.createMock(Drevo23.class);
+        mock.restore(EasyMock.anyObject(InputStream.class));
+        EasyMock.expectLastCall().andThrow(new IOException("filename (No such file or directory)")).anyTimes();
+        replay(mock);
+
+        uv.setMockObj(mock);
+
+        assertEquals("I/O Error: filename (No such file or directory)", uv.processInput("restore filename"));
+
+        verify(mock);
+    }
 
 
     // print
@@ -628,8 +676,8 @@ public class SeznamiUVTest {
     @Test
     public void testPrintOne() {
         String[] data = addStudent(5);
-        assertEquals("No. of students: 1" + searchResult(data), uv.processInput("print"));
-        count(5);
+        assertEquals("No. of students: 1\n" + searchResult(data), uv.processInput("print"));
+        count(1);
 
         reset();
     }
@@ -645,6 +693,11 @@ public class SeznamiUVTest {
         data2[2] = "B";
         data3[2] = "C";
         data4[2] = "D";
+
+        addStudent(data1);
+        addStudent(data2);
+        addStudent(data3);
+        addStudent(data4);
 
         String result = "No. of students: 4\n" + searchResult(data1)
                                                + "\n" + searchResult(data2)
@@ -876,6 +929,7 @@ public class SeznamiUVTest {
 
     public void reset() {
         uv.processInput("reset");
+        uv.processInput("y");
     }
 
     public void testAdd() {
