@@ -15,8 +15,8 @@ class pexpect:
     def __init__(self):
         commandLine = ["java",
                        "-cp",
-                       "/home/amon/Documents/TK-FRI/vaja09/out/",
-                       "PodatkovnaBaza"]
+                       "/home/amon/Documents/TK-FRI/dn-2/.idea/out/",
+                       "Studenti"]
         self.process = subprocess.Popen(commandLine,
                                         stdin=subprocess.PIPE,
                                         stdout=subprocess.PIPE,
@@ -66,4 +66,3 @@ class pexpect:
     def send(self, inputString):
         self.process.stdin.write(bytes(inputString + "\n",'utf-8'))
         self.process.stdin.flush()
-

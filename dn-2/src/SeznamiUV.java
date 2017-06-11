@@ -85,8 +85,12 @@ public class SeznamiUV {
                     while (!seznamById.isEmpty()) {
                         seznamById.removeFirst();
                     }
+                    result = "OK";
+                } else if (token.equals("n")) {
+                    result = "OK";
+                } else {
+                    result = "Invalid command";
                 }
-                result = "OK";
                 resetPhase = -1;
             } else if (removePhase > 0) {
                 while (sc.hasNextLine()) {
@@ -133,6 +137,9 @@ public class SeznamiUV {
                     }
 
             } else if (token.equals("add")) {
+                if (sc.hasNext()) {
+                    return "Invalid argument";
+                }
                 addPhase = 0;
                 studentBuffer = new String[4];
                 result = "Student ID: ";

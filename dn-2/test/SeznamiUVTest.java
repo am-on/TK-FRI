@@ -44,6 +44,13 @@ public class SeznamiUVTest {
     }
 
     @Test
+    public void testAddInvalidArgument() {
+        assertEquals("Invalid argument", uv.processInput("add argument"));
+
+        count(0);
+    }
+
+    @Test
     public void testAddFiveStudents() {
         for (int i = 0; i < 5; i++) {
             addStudent(5+i);
@@ -740,7 +747,8 @@ public class SeznamiUVTest {
 
     // reset
 
-    @Test public void testReset() {
+    @Test
+    public void testReset() {
         testAddFiveStudents();
         count(5);
 
@@ -750,12 +758,24 @@ public class SeznamiUVTest {
         count(0);
     }
 
-    @Test public void testResetCancelled() {
+    @Test
+    public void testResetCancelled() {
         testAddFiveStudents();
         count(5);
 
         assertEquals("Are you sure (y|n): ", uv.processInput("reset"));
-        uv.processInput("n");
+        assertEquals("OK: ", uv.processInput("n"));
+
+        count(5);
+    }
+
+    @Test
+    public void testResetInvalidCommand() {
+        testAddFiveStudents();
+        count(5);
+
+        assertEquals("Are you sure (y|n): ", uv.processInput("reset"));
+        assertEquals("Invalid command", uv.processInput("invalid"));
 
         count(5);
     }
