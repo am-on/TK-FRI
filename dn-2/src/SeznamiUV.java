@@ -138,8 +138,14 @@ public class SeznamiUV {
                 result = "Student ID: ";
 
             } else if (token.equals("count")) {
+                if (sc.hasNext()) {
+                    return "Invalid argument";
+                }
                 result = "No. of students: " + seznamByName.size();
             } else if (token.equals("reset")) {
+                if (sc.hasNext()) {
+                    return "Invalid argument";
+                }
                 result = "Are you sure (y|n): ";
                 resetPhase = 1;
             } else if (token.equals("search")) {
@@ -177,6 +183,9 @@ public class SeznamiUV {
                     return "First name: ";
                 }
             } else if (token.equals("print")) {
+                if (sc.hasNext()) {
+                    return "Invalid argument";
+                }
                 result = "No. of students: " + seznamByName.size();
                 result += seznamByName.size() > 0 ? "\n" + seznamByName.asList() : "";
             }else if (token.equals("save")) {
@@ -195,7 +204,7 @@ public class SeznamiUV {
                     result = "Invalid command";
                 }
             } else {
-                result = "Error: invalid command";
+                result = "Invalid command";
             }
         }  catch (IllegalArgumentException e) {
             result = "Error: Duplicated entry";

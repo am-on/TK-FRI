@@ -7,13 +7,24 @@ public class Studenti {
         String input;
         String output;
         try {
-            do {
-//                System.out.print("Enter command: ");
-                input = br.readLine();
+            input = br.readLine();
+            while (!input.equalsIgnoreCase("exit")) {
                 output = seznamiUV.processInput(input);
-                System.out.println(output);
+                switch (output) {
+                    case "First name: ":
+                    case "Last name: ":
+                    case "Avg. grade: ":
+                    case "Student ID: ":
+                    case "Are you sure (y|n): ":
+                        System.out.print(output);
+                        break;
+                    default:
+                        System.out.println(output);
+
+                }
+                input = br.readLine();
             }
-            while (!input.equalsIgnoreCase("exit"));
+            System.out.println("Goodbye");
         }
         catch (IOException e) {
             System.err.println("Failed to retrieve the next command.");

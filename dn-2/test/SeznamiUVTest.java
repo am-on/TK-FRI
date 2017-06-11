@@ -718,6 +718,12 @@ public class SeznamiUVTest {
     }
 
     @Test
+    public void testCountInvalidArgument() {
+        assertEquals("Invalid argument", uv.processInput("count argument"));
+        reset();
+    }
+
+    @Test
     public void testCountOne() {
         testAddStudent();
         count(1);
@@ -742,7 +748,6 @@ public class SeznamiUVTest {
         assertEquals("OK", uv.processInput("y"));
 
         count(0);
-
     }
 
     @Test public void testResetCancelled() {
@@ -753,6 +758,12 @@ public class SeznamiUVTest {
         uv.processInput("n");
 
         count(5);
+    }
+
+    @Test
+    public void testResetInvalidArgument() {
+        assertEquals("Invalid argument", uv.processInput("reset argument"));
+        reset();
     }
 
 
